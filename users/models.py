@@ -11,6 +11,7 @@ class User(AbstractUser):
         phone(str): Номер телефона
         role(str): Рол пользователя: user, admin
         image(ImageField): Аватар (изображение)
+        token(str): Токен для восстановления пароля
     """
     ROLE_CHOICES = [("user", "пользователь"), ("admin", "администратор")]
     username = None
@@ -24,6 +25,7 @@ class User(AbstractUser):
     image = models.ImageField(
         upload_to="avatars/", blank=True, null=True, verbose_name="Аватар", help_text="Загрузите изображение аватара"
     )
+    token = models.CharField(max_length=100, verbose_name="Token", blank=True, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
