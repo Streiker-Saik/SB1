@@ -13,6 +13,7 @@ class User(AbstractUser):
         image(ImageField): Аватар (изображение)
         token(str): Токен для восстановления пароля
     """
+
     ROLE_CHOICES = [("user", "пользователь"), ("admin", "администратор")]
     username = None
     email = models.EmailField(

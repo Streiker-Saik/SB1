@@ -2,7 +2,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from django.urls import reverse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,7 +31,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_yasg",
     "corsheaders",
-    "users"
+    "users",
 ]
 
 MIDDLEWARE = [

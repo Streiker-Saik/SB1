@@ -8,9 +8,9 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
 
 from users.models import User
 from users.serializers import UserCreateSerializer
@@ -38,6 +38,7 @@ class UserResetPassword(APIView):
     """
     Представление для запроса на сброс пароля пользователя
     """
+
     permission_classes = (AllowAny,)
 
     @swagger_auto_schema(
@@ -73,6 +74,7 @@ class UserResetPasswordConfirm(APIView):
     """
     Представление для подтверждения сброса пароля пользователя
     """
+
     permission_classes = (AllowAny,)
 
     @swagger_auto_schema(
@@ -107,5 +109,3 @@ class UserResetPasswordConfirm(APIView):
             return Response({"detail": "Пароль успешно изменен"}, status=status.HTTP_200_OK)
         except Http404:
             return Response({"detail": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
-
-
