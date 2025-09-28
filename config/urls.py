@@ -6,7 +6,7 @@ from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Django API",
+        title="SB1",
         default_version="v1",
         description="Разработка API, с помощью фреймворка Django.",
         contact=openapi.Contact(email="streiker.saik@gmail.com"),

@@ -73,7 +73,7 @@ class UserResetPassword(APIView):
         email = request.data.get("email")
         try:
             user = get_object_or_404(User, email=email)
-            uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+            uidb64 = urlsafe_base64_encode(force_bytes(str(user.pk)))
             token = secrets.token_hex(16)
             user.token = token
             user.save()
