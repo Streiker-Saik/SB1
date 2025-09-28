@@ -8,10 +8,13 @@ Serialiers, Test, Viewset/Generic, Auth, Docker, Docker-Compose, Filter
 - [Установка Poetry](#установка-poetry)
 - [Установка](#установка)
 - [Запуск проекта](#запуск-проекта)
+- [Кастомные команды](#кастомные-команды)
 - [Структура проекта](#структура-проекта)
 - [Приложение buyrate](#приложение-buyrate)
   - [Admin buyrate](#admin-buyrate)
   - [Models buyrate](#models-buyrate)
+  - [Urls buyrate](#urls-buyrate)
+  - [Views buyrate](#views-buyrate)
 - [Приложение users](#приложение-users)
   - [Admin users](#admin-users)
   - [Models users](#models-users)
@@ -96,6 +99,21 @@ pass
   ```bash
   python manage.py runserver
   ```
+
+[<- на начало](#содержание)
+
+---
+## Кастомные команды
+### csu
+Команда для создания суперпользователя по ключам email, password и chat_id.
+Если не указано, то: email='admin@example.com', password='admin', chat_id=1.
+```bash
+python manage.py csu
+```
+или
+```
+python manage.py csu --email ввести_адрес_почты --password ввести_пароль --chat_id ввести_id_телеграмма
+```
 
 [<- на начало](#содержание)
 
@@ -185,6 +203,18 @@ SB1/
 [<- на начало](#содержание)
 
 ---
+## Urls buyrate:
+
+
+[<- на начало](#содержание)
+
+---
+## Views buyrate:
+### 
+
+[<- на начало](#содержание)
+
+---
 # Приложение users:
 ## Admin users:
 ### CustomUserAdmin:
@@ -259,6 +289,32 @@ SB1/
   http://127.0.0.1:8000/users/reset_password/
 - Подтверждение изменения пароля(доступны методы: **POST**)
   http://127.0.0.1:8000/users/reset_password_confirm/
+
+[<- на начало](#содержание)
+
+---
+## Views users:
+### UserCreateAPIView:
+Представление для создания пользователя (POST)  
+- Доступ: 
+  - Всем
+- Методы:
+  - perform_create(self, serializer) -> None:  
+  Сохраняет нового пользователя и устанавливает его активным.
+### UserResetPassword:
+Представление для запроса на сброс пароля пользователя (POST)  
+- Доступ: 
+  - Всем
+- Методы:
+  - post(self, request: Request) -> Response:  
+  Запрос сброса пароля для пользователя.
+### UserResetPasswordConfirm:
+Представление для подтверждения сброса пароля пользователя (POST)  
+- Доступ: 
+  - Всем
+- Методы:
+  - post(self, request: Request) -> Response:  
+  Подтверждает сброс пароля для пользователя.
 
 [<- на начало](#содержание)
 

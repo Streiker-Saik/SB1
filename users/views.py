@@ -9,6 +9,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -36,7 +37,10 @@ class UserCreateAPIView(CreateAPIView):
 
 class UserResetPassword(APIView):
     """
-    Представление для запроса на сброс пароля пользователя
+    Представление для запроса на сброс пароля пользователя (POST)
+    Методы:
+        post(self, request: Request) -> Response:
+            Запрос сброса пароля для пользователя.
     """
 
     permission_classes = (AllowAny,)
@@ -56,7 +60,16 @@ class UserResetPassword(APIView):
             404: openapi.Response("Пользователь не найден"),
         },
     )
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request) -> Response:
+        """
+        Запрос сброса пароля доля пользователя
+        Параметры запроса:
+            {
+                email (str): Email пользователя
+            }
+        :param request: HTTP запрос, содержащий информацию для запроса сброса пароля.
+        :return: Ответ с сообщением о результате операции.
+        """
         email = request.data.get("email")
         try:
             user = get_object_or_404(User, email=email)
@@ -72,7 +85,10 @@ class UserResetPassword(APIView):
 
 class UserResetPasswordConfirm(APIView):
     """
-    Представление для подтверждения сброса пароля пользователя
+    Представление для подтверждения сброса пароля пользователя (POST)
+    Методы:
+        post(self, request: Request) -> Response:
+            Подтверждает сброс пароля для пользователя.
     """
 
     permission_classes = (AllowAny,)
@@ -95,7 +111,18 @@ class UserResetPasswordConfirm(APIView):
             404: openapi.Response("Пользователь не найден"),
         },
     )
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request) -> Response:
+        """
+        Подтверждает сброс пароля на основе предоставленных данных.
+        Параметры запроса:
+            {
+                uid (str): Зашифрованный ID пользователя
+                token (str): Токен для сброса пароля
+                new_password (str): Новый пароль для пользователя
+            }
+        :param request: HTTP запрос, содержащий информацию для сброса пароля.
+        :return: Ответ с сообщением о результате операции.
+        """
         uidb64 = request.data.get("uid")
         token = request.data.get("token")
         new_password = request.data.get("new_password")
