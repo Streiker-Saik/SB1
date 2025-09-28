@@ -13,6 +13,7 @@ Serialiers, Test, Viewset/Generic, Auth, Docker, Docker-Compose, Filter
 - [Приложение buyrate](#приложение-buyrate)
   - [Admin buyrate](#admin-buyrate)
   - [Models buyrate](#models-buyrate)
+  - [Paginators buyrate](#paginators-bayrate)
   - [Urls buyrate](#urls-buyrate)
   - [Views buyrate](#views-buyrate)
 - [Приложение users](#приложение-users)
@@ -134,6 +135,7 @@ SB1/
 |   ├── admin.py 
 |   ├── apps.py
 |   ├── models.py # модели БД
+|   ├── paginators.py # пагинация страниц
 |   ├── tests.py 
 |   ├── urls.py # маршрутизация приложения
 |   └── views.py # конструктор контроллеров
@@ -203,14 +205,59 @@ SB1/
 [<- на начало](#содержание)
 
 ---
-## Urls buyrate:
+## Paginators bayrate:
+### BuyRatePaginator:
+Пагинатор для приложения buyrate  
+К-во элементов 4 (максимум 4) на странице
 
+[<- на начало](#содержание)
+
+---
+## Urls buyrate:
+- Список объявлений (доступны методы: **GET**)
+  http://127.0.0.1:8000/ads/
+- Создание объявления (доступны методы: **POST**)
+  http://127.0.0.1:8000/ads/create/
+- Получение одного объявления (доступны методы: **GET**)
+  http://127.0.0.1:8000/ads/(pk)/
+  - где (pk) - это, целое число PrimaryKey, ID объявления
+- Редактирование объявления (доступны методы: **PUT/PATH**)
+  http://127.0.0.1:8000/ads/(pk)/update/
+  - где (pk) - это, целое число PrimaryKey, ID объявления
+- Удаление объявления (доступны методы: **DELETE**)
+  http://127.0.0.1:8000/ads/(pk)/delete/
+  - где (pk) - это, целое число PrimaryKey, ID объявления
 
 [<- на начало](#содержание)
 
 ---
 ## Views buyrate:
-### 
+### AdsListAPIView:
+Представление для получения списка всех объявлений (GET)
+- Доступ:
+  - Всем
+### AdCreateAPIView:
+Представление для создания объявления (POST)
+- Доступ:
+  - авторизованный пользователь
+- Методы:
+  - perform_create(self, serializer) -> None:  
+  Сохраняет объявление с текущим пользователем как автором.
+### AdRetrieveAPIView:
+Представление для получения объявления по идентификатору (GET)
+- Доступ:
+  - автор
+  - администратор
+### AdUpdateAPIView:
+Представление для обновления объявления по идентификатору (PUT/PATH)
+- Доступ:
+  - автор
+  - администратор
+### AdCreateAPIView:
+Представление для удаления объявления по идентификатору (DELETE)
+- Доступ:
+  - автор
+  - администратор
 
 [<- на начало](#содержание)
 
