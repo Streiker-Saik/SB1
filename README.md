@@ -105,14 +105,14 @@ pass
 ---
 ## Кастомные команды
 ### csu
-Команда для создания суперпользователя по ключам email, password и chat_id.
-Если не указано, то: email='admin@example.com', password='admin', chat_id=1.
+Команда для создания суперпользователя по ключам email, password.
+Если не указано, то: email='admin@example.com', password='admin'.
 ```bash
 python manage.py csu
 ```
 или
 ```
-python manage.py csu --email ввести_адрес_почты --password ввести_пароль --chat_id ввести_id_телеграмма
+python manage.py csu --email ввести_адрес_почты --password ввести_пароль
 ```
 
 [<- на начало](#содержание)
