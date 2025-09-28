@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "corsheaders",
     "users",
+    "buyrate",
 ]
 
 MIDDLEWARE = [

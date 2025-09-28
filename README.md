@@ -9,6 +9,9 @@ Serialiers, Test, Viewset/Generic, Auth, Docker, Docker-Compose, Filter
 - [Установка](#установка)
 - [Запуск проекта](#запуск-проекта)
 - [Структура проекта](#структура-проекта)
+- [Приложение buyrate](#приложение-buyrate)
+  - [Admin buyrate](#admin-buyrate)
+  - [Models buyrate](#models-buyrate)
 - [Приложение users](#приложение-users)
   - [Admin users](#admin-users)
   - [Models users](#models-users)
@@ -107,6 +110,15 @@ SB1/
 |   ├── settings.py # настройки проекта
 |   ├── urls.py # маршрутизация проета
 |   └── wsgi.py
+├── buyrate/ # приложение объявлений и отзывов
+|   ├── migrations/ # пакет миграции моделей
+|   |   └── ...
+|   ├── admin.py 
+|   ├── apps.py
+|   ├── models.py # модели БД
+|   ├── tests.py 
+|   ├── urls.py # маршрутизация приложения
+|   └── views.py # конструктор контроллеров
 ├── users/ # приложение аутефикации
 |   ├── migrations/ # пакет миграции моделей
 |   |   └── ...
@@ -132,9 +144,50 @@ SB1/
 [<- на начало](#содержание)
 
 ---
+# Приложение buyrate:
+## Admin buyrate:
+### AdAdmin:
+Класс для работы администратора с объявлениями
+- Атрибуты:
+  - ordering - сортировка по дате и времени создания по убыванию
+  - list_filter - фильтрация по автору
+  - list_display - выводит на экран: название, цена, автор, время и дата создания
+  - search_fields - поиск по: назван
+### ReviewAdmin:
+Класс для работы администратора с отзывами
+- Атрибуты:
+  - ordering - сортировка по дате и времени создания по убыванию
+  - list_filter - фильтрация по автору, объявлению
+  - list_display - выводит на экран: автор, объявление, дата и время создания
+  - search_fields - поиск по: объявлению
+
+[<- на начало](#содержание)
+
+---
+## Models buyrate:
+### Ad:
+Представление объявления
+- Атрибуты:
+  - title(str): Название товара 
+  - price(int): Цена товара 
+  - description(str): Описание товара 
+  - author(ForeignKey): Пользователь, который создал объявление
+  - created_at(datetime): Время и дата создания объявления.
+### Review:
+Представление отзыва
+- Атрибуты:
+  - text(str): Текст отзыва
+  - author(ForeignKey): Пользователь, который оставил отзыв
+  - ad(ForeignKey): Объявление, под которым оставлен отзыв
+  - created_at(datetime): Время и дата создания отзыва.
+
+
+[<- на начало](#содержание)
+
+---
 # Приложение users:
-## Admin users
-### CustomUserAdmin
+## Admin users:
+### CustomUserAdmin:
 Класс для работы администратора с пользователями
 - Атрибуты:
   - ordering - сортировка по email
@@ -146,7 +199,7 @@ SB1/
 [<- на начало](#содержание)
 
 ---
-## Models users
+## Models users:
 ### User:
 Представление пользователя.
 - Атрибуты:
@@ -175,7 +228,7 @@ SB1/
 
 ---
 ## Services users:
-### UserService
+### UserService:
 Сервисное класс для работы с пользователями
 - Методы:
   - send_email(subject: str, message: str, user_emails: list) -> None:  
@@ -185,7 +238,7 @@ SB1/
 
 ---
 ## Tasks users:
-### send_password_recovery_email
+### send_password_recovery_email:
 Отправляет электронное письмо для восстановления пароля.
 - Атрибуты:
   - email: Email пользователя
