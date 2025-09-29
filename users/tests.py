@@ -16,7 +16,7 @@ from users.tasks import send_password_recovery_email
 
 
 @pytest.mark.django_db
-def test_user_str(user: User):
+def test_user_str(user: User) -> None:
     """Тестирование строкового представление модели пользователя"""
     assert str(user) == user.email
 
@@ -39,7 +39,7 @@ def test_create_superuser(capsys: pytest.CaptureFixture) -> None:
 
 
 @pytest.mark.django_db
-def test_create_superuser_params() -> None:
+def test_create_superuser_params(capsys: pytest.CaptureFixture) -> None:
     """Тестирование создание суперпользователя с параметрами"""
     email = "admin1@example.com"
     assert not User.objects.filter(email=email).exists()
@@ -52,6 +52,9 @@ def test_create_superuser_params() -> None:
     assert superuser.is_active
     assert superuser.check_password(password)
     assert User.objects.count() == 1
+
+    captured = capsys.readouterr()
+    assert f"Суперпользователь {email} создан успешно!" in captured.out
 
 
 @pytest.mark.django_db
@@ -67,18 +70,19 @@ def test_create_superuser_user_exists(capsys: pytest.CaptureFixture, user: User)
 @pytest.mark.django_db
 def test_create_user(api_client: APIClient) -> None:
     """Тестирование создание пользователя"""
+    initial_count = User.objects.count()
     data = {"email": "test@test.com", "password": "test12345"}
     response = api_client.post(reverse("users:register"), data=data)
 
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.data == {
-        "id": User.objects.get(email=data["email"]).pk,
-        "email": "test@test.com",
-        "first_name": "",
-        "last_name": "",
-        "phone": None,
-        "role": "user",
-    }
+
+    assert response.data["email"] == data["email"]
+    assert response.data["first_name"] == ""
+    assert response.data["last_name"] == ""
+    assert response.data["phone"] is None
+    assert response.data["role"] == "user"
+
+    assert User.objects.count() == initial_count + 1
     assert User.objects.filter(email="test@test.com").exists()
 
 

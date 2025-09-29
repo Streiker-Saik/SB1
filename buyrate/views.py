@@ -1,10 +1,8 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
 
 from buyrate.models import Ad, Review
 from buyrate.paginators import BuyRatePaginator
@@ -47,10 +45,6 @@ class AdRetrieveAPIView(RetrieveAPIView):
 
     queryset = Ad.objects.all()
     serializer_class = AdSerializers
-    permission_classes = (
-        IsAuthenticated,
-        IsAuthor | IsAdmin,
-    )
 
     @swagger_auto_schema(operation_id="ad_read")
     def get(self, request, *args, **kwargs):
@@ -61,7 +55,7 @@ class AdUpdateAPIView(UpdateAPIView):
     """Представление для обновления объявления по идентификатору (PUT/PATH)"""
 
     queryset = Ad.objects.all()
-    serializer_class = AdSerializers
+    serializer_class = AdCreateSerializers
     permission_classes = (
         IsAuthenticated,
         IsAuthor | IsAdmin,
@@ -80,20 +74,9 @@ class AdDestroyAPIView(DestroyAPIView):
     """Представление для удаления объявления по идентификатору (DELETE)"""
 
     queryset = Ad.objects.all()
-    serializer_class = AdSerializers
     permission_classes = (IsAuthenticated, IsAuthor | IsAdmin)
 
-    @swagger_auto_schema(
-        operation_id="ad_delete",
-        manual_parameters=[
-            openapi.Parameter(
-                "id", openapi.IN_PATH, description="ID объявления", type=openapi.TYPE_INTEGER, required=True
-            ),
-        ],
-        responses={
-            204: openapi.Response("Объявление успешно удалено"),
-        },
-    )
+    @swagger_auto_schema(operation_id="ad_delete")
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
 
@@ -113,7 +96,12 @@ class AllReviewsListAPIView(ListAPIView):
 class BaseReviewByAdAPIView:
     """Базовый класс представления отзыва от объявления"""
 
+    queryset = Review.objects.all()
+
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Review.objects.none()
+
         ad_id = self.kwargs.get("ad_id")
 
         if ad_id is None:
@@ -183,10 +171,6 @@ class ReviewRetrieveAPIView(RetrieveAPIView, BaseReviewByAdAPIView):
     """Представление для получения отзыва по идентификатору (GET)"""
 
     serializer_class = ReviewSerializers
-    permission_classes = (
-        IsAuthenticated,
-        IsAuthor | IsAdmin,
-    )
 
     @swagger_auto_schema(
         operation_id="review_read",
