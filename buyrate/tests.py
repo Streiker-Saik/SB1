@@ -64,6 +64,22 @@ def test_list_ads(api_client: APIClient, ad_one: Ad, ad_two: Ad) -> None:
 
 
 @pytest.mark.django_db
+def test_filters_list_ads(api_client: APIClient, ad_one: Ad, ad_two: Ad) -> None:
+    """Тестирование фильтрации объявлений по названию"""
+    response = api_client.get(f"{reverse('buyrate:ads')}?title=Смартфон Samsung Galaxy S21")
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == 1
+
+
+@pytest.mark.django_db
+def test_search_ads_by_title(api_client: APIClient, ad_one: Ad, ad_two: Ad) -> None:
+    """Тестирование поиск объявлений по названию"""
+    response = api_client.get(f"{reverse('buyrate:ads')}?search=Смартфон")
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == 1
+
+
+@pytest.mark.django_db
 def test_create_ad(user_api_client: APIClient, user: User) -> None:
     """Тестирование создания объявления"""
     initial_count = Ad.objects.count()

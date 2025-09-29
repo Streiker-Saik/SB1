@@ -1,6 +1,8 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import NotFound
+from rest_framework.filters import SearchFilter
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
@@ -19,6 +21,10 @@ class AdsListAPIView(ListAPIView):
     pagination_class = BuyRatePaginator
     permission_classes = (AllowAny,)
     serializer_class = AdSerializers
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    filterset_fields = ["title"]
+    search_fields = ["title"]
+
 
 
 class AdCreateAPIView(CreateAPIView):
