@@ -34,3 +34,14 @@ class ReviewSerializers(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = "__all__"
+
+
+class ReviewCreateSerializers(serializers.ModelSerializer):
+    """
+    Сериализатоор для модели Review.
+    Исключены поля: автор, дата и время создания, объявление
+    """
+
+    class Meta:
+        model = Review
+        exclude = ["author", "create_at", "ad"]

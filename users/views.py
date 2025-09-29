@@ -56,17 +56,15 @@ class UserResetPassword(APIView):
             required=["email"],
         ),
         responses={
-            200: openapi.Response("Ссылка для сброса успешно отправлена"),
+            204: openapi.Response("Объявление успешно удаленно"),
             404: openapi.Response("Пользователь не найден"),
         },
     )
     def post(self, request: Request) -> Response:
         """
         Запрос сброса пароля доля пользователя
-        Параметры запроса:
-            {
-                email (str): Email пользователя
-            }
+        Требуемые параметры в теле запроса:
+        - email (str): Email пользователя
         :param request: HTTP запрос, содержащий информацию для запроса сброса пароля.
         :return: Ответ с сообщением о результате операции.
         """
@@ -114,12 +112,10 @@ class UserResetPasswordConfirm(APIView):
     def post(self, request: Request) -> Response:
         """
         Подтверждает сброс пароля на основе предоставленных данных.
-        Параметры запроса:
-            {
-                uid (str): Зашифрованный ID пользователя
-                token (str): Токен для сброса пароля
-                new_password (str): Новый пароль для пользователя
-            }
+        Требуемые параметры в теле запроса:
+        - uid (str): Зашифрованный ID пользователя
+        - token (str): Токен для сброса пароля
+        - new_password (str): Новый пароль для пользователя
         :param request: HTTP запрос, содержащий информацию для сброса пароля.
         :return: Ответ с сообщением о результате операции.
         """
