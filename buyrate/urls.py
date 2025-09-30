@@ -16,10 +16,10 @@ urlpatterns = [
     path("ads/<int:pk>/delete/", AdDestroyAPIView.as_view(), name="ad-delete"),
     # CRUD Review
     path("ads/<int:ad_id>/reviews/", ReviewsListAPIView.as_view(), name="ad-reviews"),
-    path("ads/<int:ad_id>/reviews/create/", ReviewCreateAPIView.as_view(), name="review-create"),
-    path("ads/<int:ad_id>/reviews/<int:id>/", ReviewRetrieveAPIView.as_view(), name="review-detail"),
-    path("ads/<int:ad_id>/reviews/<int:id>/update/", ReviewUpdateAPIView.as_view(), name="review-update"),
-    path("ads/<int:ad_id>/reviews/<int:id>/delete/", ReviewDestroyAPIView.as_view(), name="review-delete"),
+    path("ads/<int:ad_id>/reviews/create/", ReviewCreateAPIView.as_view(), name="ad-review-create"),
+    path("ads/<int:ad_id>/reviews/<int:pk>/", ReviewRetrieveAPIView.as_view(), name="ad-review-detail"),
+    path("ads/<int:ad_id>/reviews/<int:pk>/update/", ReviewUpdateAPIView.as_view(), name="ad-review-update"),
+    path("ads/<int:ad_id>/reviews/<int:pk>/delete/", ReviewDestroyAPIView.as_view(), name="ad-review-delete"),
     # All Review
     path("reviews/", AllReviewsListAPIView.as_view(), name="all-reviews"),
 ]

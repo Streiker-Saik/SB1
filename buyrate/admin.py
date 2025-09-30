@@ -14,13 +14,13 @@ class AdAdmin(admin.ModelAdmin):
         search_fields - поиск по: названию
     """
 
-    ordering = ("-create_at",)
-    list_filter = ("author", "create_at")
+    ordering = ("-created_at",)
+    list_filter = ("author", "created_at")
     list_display = (
         "title",
         "price",
         "author",
-        "create_at",
+        "created_at",
     )
     search_fields = ("title",)
 
@@ -36,11 +36,11 @@ class ReviewAdmin(admin.ModelAdmin):
         search_fields - поиск по: объявлению
     """
 
-    ordering = ("-create_at",)
-    list_filter = ("author", "ad", "create_at")
+    ordering = ("-created_at",)
+    list_filter = ("author", "ad", "created_at")
     list_display = (
         "author",
         "ad",
-        "create_at",
+        "created_at",
     )
     search_fields = ("ad",)

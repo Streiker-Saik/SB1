@@ -24,7 +24,7 @@ class Ad(models.Model):
         verbose_name="Создатель объявления",
         help_text="Введите ID автора объявления",
     )
-    create_at = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Время и дата создания", help_text="Автоматическое время создания"
     )
 
@@ -57,7 +57,7 @@ class Review(models.Model):
     ad = models.ForeignKey(
         Ad, models.CASCADE, related_name="reviews", verbose_name="Объявление", help_text="Введите ID объявления"
     )
-    create_at = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Время и дата создания", help_text="Автоматическое время создания"
     )
 

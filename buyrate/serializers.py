@@ -5,7 +5,7 @@ from buyrate.models import Ad, Review
 
 class AdSerializers(serializers.ModelSerializer):
     """
-    Сериализатоор для модели Ad.
+    Сериализатор для модели Ad.
     Отображаются все поля.
     """
 
@@ -16,18 +16,18 @@ class AdSerializers(serializers.ModelSerializer):
 
 class AdCreateSerializers(serializers.ModelSerializer):
     """
-    Сериализатоор для модели Ad.
+    Сериализатор для создания модели Ad.
     Исключены поля: автор, дата и время создания
     """
 
     class Meta:
         model = Ad
-        exclude = ["author", "create_at"]
+        exclude = ["author", "created_at"]
 
 
 class ReviewSerializers(serializers.ModelSerializer):
     """
-    Сериализатоор для модели Review.
+    Сериализатор для модели Review.
     Отображаются все поля.
     """
 
@@ -38,10 +38,10 @@ class ReviewSerializers(serializers.ModelSerializer):
 
 class ReviewCreateSerializers(serializers.ModelSerializer):
     """
-    Сериализатоор для модели Review.
+    Сериализатор для создания модели Review.
     Исключены поля: автор, дата и время создания, объявление
     """
 
     class Meta:
         model = Review
-        exclude = ["author", "create_at", "ad"]
+        exclude = ["author", "created_at", "ad"]

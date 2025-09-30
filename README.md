@@ -2,6 +2,7 @@
 ### Направление: Backend
 Теги: CORS, DRF, Django, Git, JWT, ORM, OpenApi_Docs, PEP8, Permissions, PostgresSQL, Readme, 
 Serialiers, Test, Viewset/Generic, Auth, Docker, Docker-Compose, Filter
+Критерий: pytest
 
 ## Содержание:
 - [Проверить версию Python](#проверить-версию-python)
@@ -15,6 +16,8 @@ Serialiers, Test, Viewset/Generic, Auth, Docker, Docker-Compose, Filter
   - [Admin buyrate](#admin-buyrate)
   - [Models buyrate](#models-buyrate)
   - [Paginators buyrate](#paginators-bayrate)
+  - [Permissions buyrate](#permissions-bayrate)
+  - [Serializers buyrate](#serializers-bayrate)
   - [Urls buyrate](#urls-buyrate)
   - [Views buyrate](#views-buyrate)
 - [Приложение users](#приложение-users)
@@ -150,6 +153,8 @@ SB1/
 |   ├── apps.py
 |   ├── models.py # модели БД
 |   ├── paginators.py # пагинация страниц
+|   ├── permissions.py # кастомные права доступа
+|   ├── serializaters.py # сериализаторы
 |   ├── tests.py 
 |   ├── urls.py # маршрутизация приложения
 |   └── views.py # конструктор контроллеров
@@ -169,8 +174,10 @@ SB1/
 ├── .env
 ├── .flake8 # настройка для flake8
 ├── .gitignore
+├── conftest.py # фикстуры для тестов
 ├── poetry.lock
 ├── pypproject.toml # зависимости для poetry
+├── pytest.ini # настройки для pytest
 ├── README.md
 └── requirements.txt # зависимости для pip
 ```
@@ -215,7 +222,6 @@ SB1/
   - ad(ForeignKey): Объявление, под которым оставлен отзыв
   - created_at(datetime): Время и дата создания отзыва.
 
-
 [<- на начало](#содержание)
 
 ---
@@ -223,6 +229,32 @@ SB1/
 ### BuyRatePaginator:
 Пагинатор для приложения buyrate  
 К-во элементов 4 (максимум 4) на странице
+
+[<- на начало](#содержание)
+
+---
+## Permissions bayrate:
+### IsAuthor:
+Право автора. Доступ, если автор объекта.
+### IsAdmin:
+Право администратора. Доступ, если пользователь с ролью администратора.
+
+[<- на начало](#содержание)
+
+---
+## Serializers bayrate:
+### AdSerializers:
+Сериализатор для модели Ad.
+Отображаются все поля.
+### AdCreateSerializers:
+Сериализатор для создания модели Ad.
+Исключены поля: автор, дата и время создания
+### ReviewSerializers:
+Сериализатор для модели Review.
+Отображаются все поля.
+### ReviewCreateSerializers:
+Сериализатор для создания модели Review.
+Исключены поля: автор, дата и время создания, объявление
 
 [<- на начало](#содержание)
 
@@ -252,17 +284,17 @@ SB1/
   - ad_id - это, целое число PrimaryKey, ID объявления
   - id - это, целое число PrimaryKey, ID отзыва
 - Получение одного объявления (доступны методы: **GET**)
-  http://127.0.0.1:8000/ads/(ad_id)/reviews/(id)/
+  http://127.0.0.1:8000/ads/(ad_id)/reviews/(pk)/
   - ad_id - это, целое число PrimaryKey, ID объявления
-  - id - это, целое число PrimaryKey, ID отзыва
+  - pk - это, целое число PrimaryKey, ID отзыва
 - Редактирование объявления (доступны методы: **PUT/PATH**)
-  http://127.0.0.1:8000/ads/(ad_id)/reviews/(id)/update/
+  http://127.0.0.1:8000/ads/(ad_id)/reviews/(pk)/update/
   - ad_id - это, целое число PrimaryKey, ID объявления
-  - id - это, целое число PrimaryKey, ID отзыва
+  - pk - это, целое число PrimaryKey, ID отзыва
 - Удаление объявления (доступны методы: **DELETE**)
-  http://127.0.0.1:8000/ads/(ad_id)/reviews/(id)/delete/
+  http://127.0.0.1:8000/ads/(ad_id)/reviews/(pk)/delete/
   - ad_id - это, целое число PrimaryKey, ID объявления
-  - id - это, целое число PrimaryKey, ID отзыва
+  - pk - это, целое число PrimaryKey, ID отзыва
 
 - Список всех отзывов (доступны методы: **GET**)  
   http://127.0.0.1:8000/reviews/

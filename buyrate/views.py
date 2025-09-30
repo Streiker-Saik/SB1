@@ -17,14 +17,13 @@ class AdsListAPIView(ListAPIView):
     Представление для получения списка всех объявлений (GET)
     """
 
-    queryset = Ad.objects.order_by("-create_at")
+    queryset = Ad.objects.order_by("-created_at")
     pagination_class = BuyRatePaginator
     permission_classes = (AllowAny,)
     serializer_class = AdSerializers
     filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ["title"]
     search_fields = ["title"]
-
 
 
 class AdCreateAPIView(CreateAPIView):
@@ -90,7 +89,7 @@ class AdDestroyAPIView(DestroyAPIView):
 class AllReviewsListAPIView(ListAPIView):
     """Представление для получения списка всех отзывов(GET)"""
 
-    queryset = Review.objects.all().order_by("-create_at")
+    queryset = Review.objects.all().order_by("-created_at")
     pagination_class = BuyRatePaginator
     serializer_class = ReviewSerializers
 
@@ -110,17 +109,14 @@ class BaseReviewByAdAPIView:
 
         ad_id = self.kwargs.get("ad_id")
 
-        if ad_id is None:
-            return Review.objects.none()
-
-        if not Ad.objects.filter(id=ad_id).exists():
+        if ad_id is None or not Ad.objects.filter(id=ad_id).exists():
             raise NotFound("Объявление с данным ID не найдено.")
 
-        queryset = Review.objects.filter(ad_id=ad_id)
+        queryset = Review.objects.filter(ad_id=ad_id).order_by("-created_at")
         return queryset
 
 
-class ReviewsListAPIView(ListAPIView, BaseReviewByAdAPIView):
+class ReviewsListAPIView(BaseReviewByAdAPIView, ListAPIView):
     """Представление для получения списка отзывов конкретного объявления (GET)"""
 
     pagination_class = BuyRatePaginator
@@ -142,7 +138,7 @@ class ReviewsListAPIView(ListAPIView, BaseReviewByAdAPIView):
         return super().get(request, *args, **kwargs)
 
 
-class ReviewCreateAPIView(CreateAPIView):
+class ReviewCreateAPIView(BaseReviewByAdAPIView, CreateAPIView):
     """
     Представление для создания отзыва (POST)
     Методы:
@@ -153,7 +149,7 @@ class ReviewCreateAPIView(CreateAPIView):
     serializer_class = ReviewCreateSerializers
 
     @swagger_auto_schema(
-        operation_id="review_create",
+        operation_id="ad_review_create",
         manual_parameters=[
             openapi.Parameter(
                 "ad_id",
@@ -173,13 +169,13 @@ class ReviewCreateAPIView(CreateAPIView):
         serializer.save(author=self.request.user, ad_id=ad_id)
 
 
-class ReviewRetrieveAPIView(RetrieveAPIView, BaseReviewByAdAPIView):
+class ReviewRetrieveAPIView(BaseReviewByAdAPIView, RetrieveAPIView):
     """Представление для получения отзыва по идентификатору (GET)"""
 
     serializer_class = ReviewSerializers
 
     @swagger_auto_schema(
-        operation_id="review_read",
+        operation_id="ad_review_read",
         manual_parameters=[
             openapi.Parameter(
                 "ad_id",
@@ -201,7 +197,7 @@ class ReviewRetrieveAPIView(RetrieveAPIView, BaseReviewByAdAPIView):
         return super().get(request, *args, **kwargs)
 
 
-class ReviewUpdateAPIView(UpdateAPIView, BaseReviewByAdAPIView):
+class ReviewUpdateAPIView(BaseReviewByAdAPIView, UpdateAPIView):
     """Представление для обновления отзыва по идентификатору (PUT/PATH)"""
 
     serializer_class = ReviewCreateSerializers
@@ -212,7 +208,7 @@ class ReviewUpdateAPIView(UpdateAPIView, BaseReviewByAdAPIView):
 
     @swagger_auto_schema(
         operation_description="Полное обновление отзыва",
-        operation_id="review_update",
+        operation_id="ad_review_update",
         manual_parameters=[
             openapi.Parameter(
                 "ad_id",
@@ -257,7 +253,7 @@ class ReviewUpdateAPIView(UpdateAPIView, BaseReviewByAdAPIView):
         return super().patch(request, *args, **kwargs)
 
 
-class ReviewDestroyAPIView(DestroyAPIView, BaseReviewByAdAPIView):
+class ReviewDestroyAPIView(BaseReviewByAdAPIView, DestroyAPIView):
     """Представление для удаления отзыва по идентификатору (DELETE)"""
 
     serializer_class = ReviewSerializers
@@ -267,7 +263,7 @@ class ReviewDestroyAPIView(DestroyAPIView, BaseReviewByAdAPIView):
     )
 
     @swagger_auto_schema(
-        operation_id="review_delete",
+        operation_id="ad_review_delete",
         manual_parameters=[
             openapi.Parameter(
                 "ad_id",
