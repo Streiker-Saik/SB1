@@ -14,8 +14,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv("DEBUG") == "True" else False
 
-BASE_URL = "http://localhost:8000/"
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -118,6 +117,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Медиатека (Media)
 MEDIA_URL = "/media/"
@@ -149,7 +149,7 @@ EMAIL_USE_SSL = True if os.getenv("EMAIL_USE_SSL") == "True" else False
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-# BASE_PASSWORD_RESET_URL = f"{BASE_URL}reset_password_confirm/"
+BASE_URL = "http://localhost:8000/"
 
 
 CELERY_TIMEZONE = TIME_ZONE
@@ -158,3 +158,14 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:80",
+    "http://localhost:8080",
+    "http://127.0.0.1:9000",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "https://read-and-write.example.com",
+]
+CORS_ALLOW_ALL_ORIGINS = False
