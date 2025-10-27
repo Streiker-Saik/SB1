@@ -25,6 +25,10 @@ class AdsListAPIView(ListAPIView):
     filterset_fields = ["title"]
     search_fields = ["title"]
 
+    @swagger_auto_schema(security=[])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 
 class AdCreateAPIView(CreateAPIView):
     """

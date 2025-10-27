@@ -21,18 +21,16 @@ from users.tasks import send_password_recovery_email
 class UserCreateAPIView(CreateAPIView):
     """
     Представление для создания пользователя (POST)
-    Методы:
-        perform_create(self, serializer) -> None:
-            Сохраняет нового пользователя и устанавливает его активным.
     """
 
     serializer_class = UserCreateSerializer
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
 
-    def perform_create(self, serializer) -> None:
-        """Сохраняет нового пользователя и устанавливает его активным."""
-        serializer.save(is_active=True)
+    @swagger_auto_schema(security=[])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
 
 
 class UserResetPassword(APIView):
@@ -47,6 +45,7 @@ class UserResetPassword(APIView):
 
     @swagger_auto_schema(
         operation_id="reset_password",
+        security=[],
         manual_parameters=[],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
@@ -56,7 +55,7 @@ class UserResetPassword(APIView):
             required=["email"],
         ),
         responses={
-            204: openapi.Response("Объявление успешно удаленно"),
+            200: openapi.Response("Объявление успешно удаленно"),
             404: openapi.Response("Пользователь не найден"),
         },
     )
@@ -93,6 +92,7 @@ class UserResetPasswordConfirm(APIView):
 
     @swagger_auto_schema(
         operation_id="reset_password_confirm",
+        security=[],
         manual_parameters=[],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
